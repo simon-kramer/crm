@@ -16,6 +16,7 @@
   "devDependencies": {
     "@nuxt/ui": "^2.12.3",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/svg-sprite": "^1.0.2",
     "@pinia/nuxt": "^0.5.1",
     "@typescript-eslint/parser": "^6.19.1",
     "eslint": "^8.56.0",

@@ -64,17 +64,30 @@ const navigation = [
     <!-- Header & Breadcrumb -->
     <UContainer>
       <div class="flex min-w-full h-16">
-        <UContainer class="flex min-w-full items-center justify-start">
+        <UContainer class="flex min-w-full items-center">
           <div class="flex w-full items-center">
             <div class="flex w-[5%]">
               <UButton variant="ghost" @click="isOpen = !isOpen">
                 <UIcon name="i-heroicons-bars-3" class="h-6 w-6"
               /></UButton>
             </div>
-            <div class="flex w-[85%]"><UBreadcrumb :links="breadcrumb" /></div>
+            <!--   <div class="flex w-[5%] pl-4">
+              <svg-icon name="logo" class="h-10 w-10" />
+            </div> -->
+            <div class="flex w-[80%] justify-start pl-12">
+              <UBreadcrumb :links="breadcrumb" />
+            </div>
             <div class="flex w-[10%] justify-end">
-              <UButton variant="ghost" class="group" @click="toggleColorMode">
-                <UIcon name="i-heroicons-swatch" class="h-4 w-4" />
+              <UButton
+                variant="ghost"
+                class="group"
+                :icon="
+                  colorMode.preference === 'system'
+                    ? 'i-heroicons-sun'
+                    : 'i-heroicons-moon'
+                "
+                @click="toggleColorMode"
+              >
                 <span
                   class="inline-block overflow-hidden w-0 group-hover:w-32 transition-width duration-300 ease-linear h-6 whitespace-nowrap"
                   >{{ colorModeButtonLabel }}</span
@@ -116,15 +129,16 @@ const navigation = [
     </USlideover>
 
     <!-- Page Body -->
-    <div class="my-12"><slot /></div>
+    <div>
+      <UContainer class="my-12"><slot /></UContainer>
+    </div>
 
     <!-- Global Footer -->
 
     <div class="fixed bottom-0 w-full">
-      <UDivider
-        label="CRM UI"
-        :ui="{ label: 'text-primary-500 dark:text-primary-400' }"
-      />
+      <UDivider />
+      <!-- <svg-icon name="logo" class="h-8 w-8" />
+      </UDivider> -->
       <UContainer>
         <div
           class="flex justify-between items-center p-8 text-gray-300 dark:text-gray-500 text-xs"
