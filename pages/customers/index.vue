@@ -1,9 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <UContainer>
-    <div class="text-3xl">hhe</div>
-  </UContainer>
+  <div></div>
 </template>
 
 <style></style>
