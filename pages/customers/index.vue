@@ -1,14 +1,24 @@
 <script lang="ts" setup>
+import type { Customer } from '@/models/customers'
 // Const & imports
 const selected = ref([])
 const page = ref(1)
 const pageCount = 10
+const isModalOpen = ref(false)
+const currentRow = ref<Customer | null>(null)
+const showAlert = ref(true)
+
+const handleEditModal = (row: Customer) => {
+  currentRow.value = row
+  isModalOpen.value = true
+  console.log(isModalOpen.value)
+}
 
 // Mock Up -- Don't get used with API
-const paginatedPeople = computed(() => {
+const customers = computed(() => {
   const startIndex = (page.value - 1) * pageCount
   const endIndex = startIndex + pageCount
-  return people.slice(startIndex, endIndex)
+  return customer.slice(startIndex, endIndex)
 })
 
 const columns = [
@@ -31,13 +41,10 @@ const columns = [
     key: 'status',
     label: 'Status',
     sortable: true
-  },
-  {
-    key: 'actions'
   }
 ]
 
-const people = [
+const customer = [
   {
     id: 1,
     first_name: 'Lindsay',
@@ -179,69 +186,86 @@ const people = [
     status: false
   }
 ]
-
-const items = (row) => [
-  [
-    {
-      label: 'Edit',
-      icon: 'i-heroicons-pencil-square-20-solid',
-      click: () => console.log('Edit', row.id)
-    },
-    {
-      label: 'Lock',
-      icon: 'i-heroicons-lock-closed'
-    }
-  ],
-  [
-    {
-      label: 'Delete',
-      icon: 'i-heroicons-trash-20-solid'
-    }
-  ]
-]
 </script>
 
 <template>
-  <UCard>
-    <UTable
-      v-model="selected"
-      :rows="paginatedPeople"
-      :columns="columns"
-      :empty-state="{
-        icon: 'i-heroicons-circle-stack-20-solid',
-        label: 'No customers found.'
+  <div class="flex-wrap space-y-12">
+    <UAlert
+      v-if="showAlert"
+      icon="i-heroicons-light-bulb"
+      color="primary"
+      variant="subtle"
+      title="Good to know!"
+      description="If you're clicking on a row inside the table, it will open the edit modal to customize the details of the customers."
+      :close-button="{
+        icon: 'i-heroicons-x-mark-20-solid',
+        color: 'gray',
+        variant: 'link',
+        padded: false
       }"
-    >
-      <template #name-data="{ row }">
-        <span
-          :class="[
-            selected.find((person) => person.id === row.id) &&
-              'text-primary-500 dark:text-primary-400'
-          ]"
-          >{{ row.name }}</span
-        >
-      </template>
+      @close="showAlert = false"
+    />
+    <UCard>
+      <UTable
+        v-model="selected"
+        :rows="customers"
+        :columns="columns"
+        :empty-state="{
+          icon: 'i-heroicons-circle-stack-20-solid',
+          label: 'No customers found.'
+        }"
+        @select="handleEditModal"
+      >
+        <template #name-data="{ row }">
+          <span
+            :class="[
+              selected.find((person: any) => person.id === row.id) &&
+                'text-primary-500 dark:text-primary-400'
+            ]"
+            >{{ row.name }}</span
+          >
+        </template>
+      </UTable>
+      <div
+        class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+      >
+        <UPagination
+          v-model="page"
+          :page-count="pageCount"
+          :total="customer.length"
+        />
+      </div>
+    </UCard>
 
-      <template #actions-data="{ row }">
-        <UDropdown :items="items(row)">
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-ellipsis-horizontal-20-solid"
-          />
-        </UDropdown>
-      </template>
-    </UTable>
-    <div
-      class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
-    >
-      <UPagination
-        v-model="page"
-        :page-count="pageCount"
-        :total="people.length"
-      />
-    </div>
-  </UCard>
+    <UModal v-model="isModalOpen">
+      <UCard
+        :ui="{
+          ring: '',
+          divide: 'divide-y divide-gray-100 dark:divide-gray-800'
+        }"
+      >
+        <template #header>
+          <div class="flex justify-between">
+            <h2 class="font-medium text-md">Edit Customer</h2>
+            <UButton
+              icon="i-heroicons-x-mark-20-solid"
+              variant="ghost"
+              @click="isModalOpen = false"
+            />
+          </div>
+        </template>
+
+        <div>content here</div>
+
+        <template #footer>
+          <div class="flex justify-between">
+            <UButton variant="outline" color="red">Lock Customer</UButton>
+            <UButton variant="solid" color="primary">Save Changes</UButton>
+          </div>
+        </template>
+      </UCard>
+    </UModal>
+  </div>
 </template>
 
 <style></style>
