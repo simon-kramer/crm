@@ -22,7 +22,7 @@ const toggleColorMode = () => {
 const breadcrumb = computed(() => {
   const breadcrumbLinks = [
     {
-      label: "Dashboard",
+      label: "Home",
       icon: "i-heroicons-home",
       to: "/",
     },
@@ -42,17 +42,32 @@ const breadcrumb = computed(() => {
   }
   return breadcrumbLinks;
 });
+
+const navigation = [
+  [
+    {
+      label: "Home",
+      icon: "i-heroicons-home",
+      to: "/",
+    },
+    {
+      label: "Customers",
+      icon: "i-heroicons-clipboard-document-list",
+      to: "/customers",
+    },
+  ],
+];
 </script>
 
 <template>
   <div class="h-screen dark:bg-slate-900">
-    <div class="flex min-w-full h-16 border-b border-primary-700">
+    <div class="flex min-w-full h-16">
       <UContainer class="flex min-w-full items-center justify-start">
         <div class="flex w-full items-center">
           <div class="flex w-[5%]">
             <UIcon
               name="i-heroicons-bars-3"
-              class="h-8 w-8"
+              class="h-6 w-6"
               @click="isOpen = !isOpen"
             />
           </div>
@@ -74,15 +89,19 @@ const breadcrumb = computed(() => {
         :ui="{
           body: { base: 'flex-1' },
           ring: '',
-          divide: 'divide-y divide-primary dark:divide-primary-700',
+          divide: 'divide-y',
         }"
       >
-        <template #header>
-          <div class="text-lg font-medium">Navigation</div>
-        </template>
+ <template #header>
+  <div
+          class="flex items-center justify-between"
+        >
+          <div class="text-lg font-medium text-primary">Navigation</div>
+          <div><UIcon name="i-heroicons-chevron-down" class="h-4 w-4" /></div>
+        </div>
+ </template>
 
-        <div>Navigation links here</div>
-
+        <UVerticalNavigation :links="navigation" :ui="{ base: 'gap-4' }"/>
         <template #footer>
           <div class="flex items-center justify-between">
             <UButton variant="outline">Logout</UButton>
@@ -91,6 +110,6 @@ const breadcrumb = computed(() => {
         </template>
       </UCard>
     </USlideover>
-    <div class="mt-6"><slot /></div>
+    <div class="mt-12"><slot /></div>
   </div>
 </template>
