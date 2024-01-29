@@ -11,7 +11,6 @@ const showAlert = ref(true)
 const handleEditModal = (row: Customer) => {
   currentRow.value = row
   isModalOpen.value = true
-  console.log(isModalOpen.value)
 }
 
 // Mock Up -- Don't get used with API
@@ -186,6 +185,10 @@ const customer = [
     status: false
   }
 ]
+
+const saveChanges = () => {
+  /* handle save changes */
+}
 </script>
 
 <template>
@@ -245,7 +248,7 @@ const customer = [
         }"
       >
         <template #header>
-          <div class="flex justify-between">
+          <div class="flex justify-between items-center">
             <h2 class="font-medium text-md">Edit Customer</h2>
             <UButton
               icon="i-heroicons-x-mark-20-solid"
@@ -255,12 +258,39 @@ const customer = [
           </div>
         </template>
 
-        <div>content here</div>
+        <div v-if="currentRow" class="space-y-6">
+          <div class="flex justify-between">
+            <div>
+              <label for="first_name" class="text-sm font-medium"
+                >First Name</label
+              >
+              <UInput v-model="currentRow.first_name" label="First Name" />
+            </div>
+            <div>
+              <label for="last_name" class="text-sm font-medium"
+                >Last Name</label
+              >
+              <UInput v-model="currentRow.last_name" label="Last Name" />
+            </div>
+          </div>
+          <div>
+            <label for="email" class="text-sm font-medium">E-Mail Adress</label>
+            <UInput v-model="currentRow.email" label="Email" />
+          </div>
+          <div class="flex justify-between items-center">
+            <div>
+              <label for="status" class="text-sm font-medium">Status</label>
+              <p class="text-xs font-light">(active or locked)</p>
+            </div>
+            <UToggle v-model="currentRow.status" label="Status" />
+          </div>
+        </div>
 
         <template #footer>
-          <div class="flex justify-between">
-            <UButton variant="outline" color="red">Lock Customer</UButton>
-            <UButton variant="solid" color="primary">Save Changes</UButton>
+          <div class="flex justify-end">
+            <UButton variant="solid" color="primary" @click="saveChanges"
+              >Save Changes</UButton
+            >
           </div>
         </template>
       </UCard>

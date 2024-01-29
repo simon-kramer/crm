@@ -143,10 +143,7 @@ const navigation = [
         <div
           class="flex justify-between items-center p-8 text-gray-300 dark:text-gray-500 text-xs"
         >
-          <div>
-            &copy; {{ new Date().getFullYear() }} Simon Kramer. All Rights
-            Reserved.
-          </div>
+          <div>&copy; {{ new Date().getFullYear() }} Simon Kramer</div>
           <div>
             <NuxtLink
               to="https://github.com/simon-kramer"
