@@ -7,18 +7,15 @@ const pageCount = 10
 const isModalOpen = ref(false)
 const currentRow = ref<Customer | null>(null)
 const showAlert = ref(true)
+const customerStore = useCustomerStore()
 
 const handleEditModal = (row: Customer) => {
   currentRow.value = row
   isModalOpen.value = true
 }
 
-// Mock Up -- Don't get used with API
-const customers = computed(() => {
-  const startIndex = (page.value - 1) * pageCount
-  const endIndex = startIndex + pageCount
-  return customer.slice(startIndex, endIndex)
-})
+const customers = computed(() => customerStore.customers)
+const customersLoading = computed(() => customerStore.customersLoading)
 
 const columns = [
   {
@@ -189,6 +186,10 @@ const customer = [
 const saveChanges = () => {
   /* handle save changes */
 }
+
+onMounted(() => {
+  customerStore.fetchCustomers()
+})
 </script>
 
 <template>
@@ -213,6 +214,7 @@ const saveChanges = () => {
         v-model="selected"
         :rows="customers"
         :columns="columns"
+        :loading="customersLoading"
         :empty-state="{
           icon: 'i-heroicons-circle-stack-20-solid',
           label: 'No customers found.'
@@ -227,6 +229,11 @@ const saveChanges = () => {
             ]"
             >{{ row.name }}</span
           >
+        </template>
+        <template #status-data="{ row }">
+          <UBadge :color="row.status ? 'primary' : 'red'" variant="subtle">{{
+            row.status ? 'Active' : 'Locked'
+          }}</UBadge>
         </template>
       </UTable>
       <div
@@ -264,25 +271,46 @@ const saveChanges = () => {
               <label for="first_name" class="text-sm font-medium"
                 >First Name</label
               >
-              <UInput v-model="currentRow.first_name" label="First Name" />
+              <UInput
+                v-model="currentRow.first_name"
+                label="First Name"
+                :disabled="!currentRow.status"
+              />
             </div>
             <div>
               <label for="last_name" class="text-sm font-medium"
                 >Last Name</label
               >
-              <UInput v-model="currentRow.last_name" label="Last Name" />
+              <UInput
+                v-model="currentRow.last_name"
+                label="Last Name"
+                :disabled="!currentRow.status"
+              />
             </div>
           </div>
           <div>
-            <label for="email" class="text-sm font-medium">E-Mail Adress</label>
-            <UInput v-model="currentRow.email" label="Email" />
+            <label for="email" class="text-sm font-medium"
+              >E-Mail Address</label
+            >
+            <UInput
+              v-model="currentRow.email"
+              label="Email"
+              :disabled="!currentRow.status"
+            />
           </div>
           <div class="flex justify-between items-center">
             <div>
               <label for="status" class="text-sm font-medium">Status</label>
               <p class="text-xs font-light">(active or locked)</p>
             </div>
-            <UToggle v-model="currentRow.status" label="Status" />
+            <div class="flex items-center gap-x-4">
+              <UBadge
+                :color="currentRow.status ? 'primary' : 'red'"
+                variant="subtle"
+                >{{ currentRow.status ? 'Active' : 'Locked' }}</UBadge
+              >
+              <UToggle v-model="currentRow.status" label="Status" />
+            </div>
           </div>
         </div>
 
@@ -297,5 +325,3 @@ const saveChanges = () => {
     </UModal>
   </div>
 </template>
-
-<style></style>

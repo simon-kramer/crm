@@ -60,7 +60,7 @@ const navigation = [
 </script>
 
 <template>
-  <div class="h-screen dark:bg-slate-900">
+  <div class="min-h-screen dark:bg-slate-900">
     <!-- Header & Breadcrumb -->
     <UContainer>
       <div class="flex min-w-full h-16">
@@ -129,19 +129,19 @@ const navigation = [
     </USlideover>
 
     <!-- Page Body -->
-    <div>
+    <div class="pb-16">
       <UContainer class="my-12"><slot /></UContainer>
     </div>
 
     <!-- Global Footer -->
 
-    <div class="fixed bottom-0 w-full">
+    <div class="fixed bottom-0 w-full z-10 bg-white dark:bg-slate-900">
       <UDivider />
       <!-- <svg-icon name="logo" class="h-8 w-8" />
       </UDivider> -->
       <UContainer>
         <div
-          class="flex justify-between items-center p-8 text-gray-300 dark:text-gray-500 text-xs"
+          class="flex justify-between items-center p-4 text-gray-300 dark:text-gray-500 text-xs"
         >
           <div>&copy; {{ new Date().getFullYear() }} Simon Kramer</div>
           <div>
