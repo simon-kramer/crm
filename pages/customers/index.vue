@@ -1,22 +1,32 @@
 <script lang="ts" setup>
 import type { Customer } from '@/models/customers'
 // Const & imports
+const customerStore = useCustomerStore()
 const selected = ref([])
 const page = ref(1)
 const pageCount = 10
 const isModalOpen = ref(false)
 const currentRow = ref<Customer | null>(null)
-const showAlert = ref(true)
-const customerStore = useCustomerStore()
+const showInfoBanner = ref(true)
 
 const handleEditModal = (row: Customer) => {
   currentRow.value = row
   isModalOpen.value = true
 }
 
+// Customers & Pagination handling
 const customers = computed(() => customerStore.customers)
 const customersLoading = computed(() => customerStore.customersLoading)
+// Pagination via index based on page number for the mockup purpose, mock API does not provide meta
+const customersPaginated = computed(() => {
+  const startIndex = (page.value - 1) * pageCount
+  const endIndex = startIndex + pageCount
+  return customers.value.slice(startIndex, endIndex)
+})
 
+const totalCustomers = computed(() => customers.value.length)
+
+// Column definitions
 const columns = [
   {
     key: 'first_name',
@@ -40,149 +50,6 @@ const columns = [
   }
 ]
 
-const customer = [
-  {
-    id: 1,
-    first_name: 'Lindsay',
-    last_name: 'Walton',
-    email: 'lindsay.walton@example.com',
-    status: true
-  },
-  {
-    id: 2,
-    first_name: 'Courtney',
-    last_name: 'Henry',
-    email: 'courtney.henry@example.com',
-    status: false
-  },
-  {
-    id: 3,
-    first_name: 'Tom',
-    last_name: 'Cook',
-    email: 'tom.cook@example.com',
-    status: true
-  },
-  {
-    id: 4,
-    first_name: 'Whitney',
-    last_name: 'Francis',
-    email: 'whitney.francis@example.com',
-    status: false
-  },
-  {
-    id: 5,
-    first_name: 'Leonard',
-    last_name: 'Krasner',
-    email: 'leonard.krasner@example.com',
-    status: true
-  },
-  {
-    id: 6,
-    first_name: 'Floyd',
-    last_name: 'Miles',
-    email: 'floyd.miles@example.com',
-    status: true
-  },
-  {
-    id: 7,
-    first_name: 'Avery',
-    last_name: 'Stewart',
-    email: 'avery.stewart@example.com',
-    status: false
-  },
-  {
-    id: 8,
-    first_name: 'Jesse',
-    last_name: 'Bradley',
-    email: 'jesse.bradley@example.com',
-    status: true
-  },
-  {
-    id: 9,
-    first_name: 'Daisy',
-    last_name: 'Banks',
-    email: 'daisy.banks@example.com',
-    status: true
-  },
-  {
-    id: 10,
-    first_name: 'Alex',
-    last_name: 'Ortiz',
-    email: 'alex.ortiz@example.com',
-    status: false
-  },
-  {
-    id: 11,
-    first_name: 'Riley',
-    last_name: 'Moore',
-    email: 'riley.moore@example.com',
-    status: true
-  },
-  {
-    id: 12,
-    first_name: 'Jordan',
-    last_name: 'Patel',
-    email: 'jordan.patel@example.com',
-    status: false
-  },
-  {
-    id: 13,
-    first_name: 'Taylor',
-    last_name: 'Jenkins',
-    email: 'taylor.jenkins@example.com',
-    status: true
-  },
-  {
-    id: 14,
-    first_name: 'Casey',
-    last_name: 'Reed',
-    email: 'casey.reed@example.com',
-    status: true
-  },
-  {
-    id: 15,
-    first_name: 'Jamie',
-    last_name: 'Cruz',
-    email: 'jamie.cruz@example.com',
-    status: false
-  },
-  {
-    id: 16,
-    first_name: 'Morgan',
-    last_name: 'Bishop',
-    email: 'morgan.bishop@example.com',
-    status: true
-  },
-  {
-    id: 17,
-    first_name: 'Jordan',
-    last_name: 'Gilbert',
-    email: 'jordan.gilbert@example.com',
-    status: false
-  },
-  {
-    id: 18,
-    first_name: 'Charlie',
-    last_name: 'Lane',
-    email: 'charlie.lane@example.com',
-    status: true
-  },
-  {
-    id: 19,
-    first_name: 'Alex',
-    last_name: 'Green',
-    email: 'alex.green@example.com',
-    status: true
-  },
-  {
-    id: 20,
-    first_name: 'Cameron',
-    last_name: 'Tucker',
-    email: 'cameron.tucker@example.com',
-    status: false
-  }
-]
-
 const saveChanges = () => {
   /* handle save changes */
 }
@@ -195,24 +62,24 @@ onMounted(() => {
 <template>
   <div class="flex-wrap space-y-12">
     <UAlert
-      v-if="showAlert"
+      v-if="showInfoBanner"
       icon="i-heroicons-light-bulb"
       color="primary"
       variant="subtle"
       title="Good to know!"
-      description="If you're clicking on a row inside the table, it will open the edit modal to customize the details of the customers."
+      description="If you're clicking on a row inside the table, it will open the edit modal to customize the details of the customer selected."
       :close-button="{
         icon: 'i-heroicons-x-mark-20-solid',
         color: 'gray',
         variant: 'link',
         padded: false
       }"
-      @close="showAlert = false"
+      @close="showInfoBanner = false"
     />
     <UCard>
       <UTable
         v-model="selected"
-        :rows="customers"
+        :rows="customersPaginated"
         :columns="columns"
         :loading="customersLoading"
         :empty-state="{
@@ -242,7 +109,7 @@ onMounted(() => {
         <UPagination
           v-model="page"
           :page-count="pageCount"
-          :total="customer.length"
+          :total="totalCustomers"
         />
       </div>
     </UCard>
