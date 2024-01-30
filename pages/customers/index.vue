@@ -1,84 +1,89 @@
 <script lang="ts" setup>
+import { v4 as uuidv4 } from 'uuid'
 import type { Customer } from '@/models/customers'
-// Const & imports
 const customerStore = useCustomerStore()
 
-// Selection logic
-const selected = ref([])
-const selectedCountText = computed(() => {
-  const total = customersPaginated.value.length
-  const selectedCount = selected.value.length
-
-  if (selectedCount === 0) return ''
-  if (selectedCount === total) return 'All Selected'
-  return `${selectedCount} selected`
-})
-
-const setCustomersStatus = (newStatus: boolean) => {
-  const selectedIds = selected.value.map((customer) => customer.id)
-  customerStore.updateCustomersStatus(selectedIds, newStatus)
-}
-
-// Modal logic
+// Reactive state for selected customers and the current customer being edited or added
+const selected = ref<Customer[]>([])
 const currentRow = ref<Customer | null>(null)
-
-const handleEditModal = (row: Customer) => {
-  currentRow.value = row
-  isModalOpen.value = true
-}
 const isModalOpen = ref(false)
 
-// Customers & Pagination handling
+// Computed properties for customers
 const customers = computed(() => customerStore.customers)
 const customersLoading = computed(() => customerStore.customersLoading)
 
-// Pagination via index based on page number for the mockup purpose
+// Computed property for pagination of customers
+const page = ref(1)
+const pageCount = 10
+const totalCustomers = computed(() => customers.value.length)
 const customersPaginated = computed(() => {
   const startIndex = (page.value - 1) * pageCount
   const endIndex = startIndex + pageCount
   return customers.value.slice(startIndex, endIndex)
 })
-const page = ref(1)
-const pageCount = 10
-const totalCustomers = computed(() => customers.value.length)
 
-// Column definitions
+// Column definitions for the customer table
 const columns = [
-  {
-    key: 'first_name',
-    label: 'First Name',
-    sortable: true
-  },
-  {
-    key: 'last_name',
-    label: 'Last Name',
-    sortable: true
-  },
-  {
-    key: 'email',
-    label: 'Email',
-    sortable: true
-  },
-  {
-    key: 'status',
-    label: 'Status',
-    sortable: true
-  }
+  { key: 'first_name', label: 'First Name', sortable: true },
+  { key: 'last_name', label: 'Last Name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
+  { key: 'status', label: 'Status', sortable: true }
 ]
 
+// Computed property for selected count text
+const selectedCountText = computed(() => {
+  const total = customersPaginated.value.length
+  const selectedCount = selected.value.length
+  return selectedCount === 0
+    ? ''
+    : selectedCount === total
+      ? 'All Selected'
+      : `${selectedCount} selected`
+})
+
+// Function to handle editing a customer
+const handleEditModal = (row: Customer) => {
+  currentRow.value = row
+  isModalOpen.value = true
+}
+
+// Determine the modal headline based on the currentRow context
+const modalHeadline = computed(() => {
+  return currentRow.value?.id ? 'Edit Customer' : 'Add New Customer'
+})
+
+// Function to open the modal for either editing an existing customer or adding a new one
+const openModal = (customer: Customer | null = null) => {
+  currentRow.value = customer ?? {
+    id: '',
+    first_name: '',
+    last_name: '',
+    email: '',
+    status: true
+  }
+  isModalOpen.value = true
+}
+
+// Function to handle saving changes or adding a new customer
 const saveChanges = () => {
   if (currentRow.value) {
-    const updates = {
-      first_name: currentRow.value.first_name,
-      last_name: currentRow.value.last_name,
-      email: currentRow.value.email,
-      status: currentRow.value.status
+    if (!currentRow.value.id) {
+      currentRow.value.id = uuidv4()
+      customerStore.addCustomer(currentRow.value)
+    } else {
+      customerStore.updateCustomer(currentRow.value.id, currentRow.value)
     }
-    customerStore.updateCustomer(currentRow.value.id, updates)
     isModalOpen.value = false
   }
 }
 
+// Function to set the status of selected customers
+const setCustomersStatus = (newStatus: boolean) => {
+  const selectedIds = selected.value.map((customer) => customer.id)
+  customerStore.updateCustomersStatus(selectedIds, newStatus)
+}
+
+// Fetch customers on component mount
 onMounted(() => {
   customerStore.fetchCustomers()
 })
@@ -96,6 +101,12 @@ onMounted(() => {
     />
 
     <!-- Customer Datatable -->
+    <div class="flex justify-between -mb-4 items-center">
+      <div class="text-sm">Customers Overall:</div>
+      <UButton variant="solid" color="primary" @click="() => openModal()"
+        >Add New Customer</UButton
+      >
+    </div>
     <UCard>
       <UTable
         v-model="selected"
@@ -176,7 +187,7 @@ onMounted(() => {
       >
         <template #header>
           <div class="flex justify-between items-center">
-            <h2 class="font-medium text-md">Edit Customer</h2>
+            <h2 class="font-medium text-md">{{ modalHeadline }}</h2>
             <UButton
               icon="i-heroicons-x-mark-20-solid"
               variant="ghost"
@@ -237,7 +248,7 @@ onMounted(() => {
         <template #footer>
           <div class="flex justify-end">
             <UButton variant="solid" color="primary" @click="saveChanges"
-              >Save Changes</UButton
+              >Save</UButton
             >
           </div>
         </template>
