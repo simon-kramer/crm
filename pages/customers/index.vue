@@ -2,28 +2,44 @@
 import type { Customer } from '@/models/customers'
 // Const & imports
 const customerStore = useCustomerStore()
+
+// Selection logic
 const selected = ref([])
-const page = ref(1)
-const pageCount = 10
-const isModalOpen = ref(false)
+const selectedCountText = computed(() => {
+  const total = customersPaginated.value.length
+  const selectedCount = selected.value.length
+
+  if (selectedCount === 0) return ''
+  if (selectedCount === total) return 'All Selected'
+  return `${selectedCount} selected`
+})
+
+const setCustomersStatus = (newStatus: boolean) => {
+  const selectedIds = selected.value.map((customer) => customer.id)
+  customerStore.updateCustomersStatus(selectedIds, newStatus)
+}
+
+// Modal logic
 const currentRow = ref<Customer | null>(null)
-const showInfoBanner = ref(true)
 
 const handleEditModal = (row: Customer) => {
   currentRow.value = row
   isModalOpen.value = true
 }
+const isModalOpen = ref(false)
 
 // Customers & Pagination handling
 const customers = computed(() => customerStore.customers)
 const customersLoading = computed(() => customerStore.customersLoading)
-// Pagination via index based on page number for the mockup purpose, mock API does not provide meta
+
+// Pagination via index based on page number for the mockup purpose
 const customersPaginated = computed(() => {
   const startIndex = (page.value - 1) * pageCount
   const endIndex = startIndex + pageCount
   return customers.value.slice(startIndex, endIndex)
 })
-
+const page = ref(1)
+const pageCount = 10
 const totalCustomers = computed(() => customers.value.length)
 
 // Column definitions
@@ -70,21 +86,16 @@ onMounted(() => {
 
 <template>
   <div class="flex-wrap space-y-12">
+    <!-- Alert/InfoBanner -->
     <UAlert
-      v-if="showInfoBanner"
       icon="i-heroicons-light-bulb"
       color="primary"
       variant="subtle"
       title="Good to know!"
       description="If you're clicking on a row inside the table, it will open the edit modal to customize the details of the customer selected."
-      :close-button="{
-        icon: 'i-heroicons-x-mark-20-solid',
-        color: 'gray',
-        variant: 'link',
-        padded: false
-      }"
-      @close="showInfoBanner = false"
     />
+
+    <!-- Customer Datatable -->
     <UCard>
       <UTable
         v-model="selected"
@@ -113,7 +124,39 @@ onMounted(() => {
         </template>
       </UTable>
       <div
-        class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+        v-if="selectedCountText"
+        class="flex justify-between border-t pt-6 border-gray-200 dark:border-gray-700"
+      >
+        <div class="flex gap-x-6">
+          <UBadge color="primary" variant="subtle">{{
+            selectedCountText
+          }}</UBadge>
+          <div class="flex gap-x-2">
+            <UButton
+              variant="soft"
+              color="primary"
+              size="xs"
+              @click="() => setCustomersStatus(true)"
+              >Set selected to Active</UButton
+            >
+            <UButton
+              variant="soft"
+              color="red"
+              size="xs"
+              @click="() => setCustomersStatus(false)"
+              >Set selected to Locked</UButton
+            >
+          </div>
+        </div>
+        <UPagination
+          v-model="page"
+          :page-count="pageCount"
+          :total="totalCustomers"
+        />
+      </div>
+      <div
+        v-else
+        class="flex justify-end border-t pt-6 border-gray-200 dark:border-gray-700"
       >
         <UPagination
           v-model="page"
@@ -123,6 +166,7 @@ onMounted(() => {
       </div>
     </UCard>
 
+    <!-- Edit Modal -->
     <UModal v-model="isModalOpen">
       <UCard
         :ui="{

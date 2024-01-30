@@ -2,12 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  /* Automatic prepending the API URL */
+  /* Automatic prepending for the API URL */
   runtimeConfig: {
     public: {
-      apiUrl: process.env.API_URL,
-      apiToken: process.env.API_TOKEN
+      apiUrl: process.env.API_URL
     }
   },
-  modules: ['@pinia/nuxt', '@nuxt/ui', '@nuxtjs/svg-sprite']
+  modules: ['@pinia/nuxt', '@nuxt/ui', '@nuxt/image']
 })

@@ -1,4 +1,3 @@
-import { defineStore } from 'pinia'
 import { type Customer } from '@/models/customers'
 
 export const useCustomerStore = defineStore('customer', {
@@ -30,6 +29,27 @@ export const useCustomerStore = defineStore('customer', {
         if (index !== -1) {
           Object.assign(this.customers[index], updates)
         }
+      } catch (e: any) {
+        this.error = e.message
+      } finally {
+        this.customersLoading = false
+      }
+    },
+
+    async updateCustomersStatus(selectedIds: string[], newStatus: boolean) {
+      this.customersLoading = true
+      this.error = null
+      try {
+        const updatePromises = selectedIds.map((id) =>
+          useAxios().patch(`/customers/${id}`, { status: newStatus })
+        )
+        await Promise.all(updatePromises)
+
+        this.customers.forEach((customer) => {
+          if (selectedIds.includes(customer.id)) {
+            customer.status = newStatus
+          }
+        })
       } catch (e: any) {
         this.error = e.message
       } finally {
