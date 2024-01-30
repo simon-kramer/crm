@@ -51,7 +51,16 @@ const columns = [
 ]
 
 const saveChanges = () => {
-  /* handle save changes */
+  if (currentRow.value) {
+    const updates = {
+      first_name: currentRow.value.first_name,
+      last_name: currentRow.value.last_name,
+      email: currentRow.value.email,
+      status: currentRow.value.status
+    }
+    customerStore.updateCustomer(currentRow.value.id, updates)
+    isModalOpen.value = false
+  }
 }
 
 onMounted(() => {

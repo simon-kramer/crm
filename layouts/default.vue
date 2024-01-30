@@ -71,9 +71,7 @@ const navigation = [
                 <UIcon name="i-heroicons-bars-3" class="h-6 w-6"
               /></UButton>
             </div>
-            <!--   <div class="flex w-[5%] pl-4">
-              <svg-icon name="logo" class="h-10 w-10" />
-            </div> -->
+
             <div class="flex w-[80%] justify-start pl-12">
               <UBreadcrumb :links="breadcrumb" />
             </div>
@@ -137,8 +135,6 @@ const navigation = [
 
     <div class="fixed bottom-0 w-full z-10 bg-white dark:bg-slate-900">
       <UDivider />
-      <!-- <svg-icon name="logo" class="h-8 w-8" />
-      </UDivider> -->
       <UContainer>
         <div
           class="flex justify-between items-center p-4 text-gray-300 dark:text-gray-500 text-xs"

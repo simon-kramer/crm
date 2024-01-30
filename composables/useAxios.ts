@@ -4,13 +4,11 @@ import axios from 'axios'
 export default function useAxios(skipInterceptor = false) {
   const config = useRuntimeConfig()
   const baseUrl = config.public.apiUrl
-  const apiToken = config.public.apiToken
 
   const axiosInstance = axios.create({
     baseURL: baseUrl,
     headers: {
-      'Content-Type': 'application/json',
-      'X-Jsio-Token': apiToken
+      'Content-Type': 'application/json'
     }
   })
 

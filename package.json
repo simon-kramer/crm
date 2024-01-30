@@ -11,7 +11,8 @@
     "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check .",
     "lint": "yarn lint:js && yarn lint:prettier",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
+    "startdb": "json-server --watch db.json --port 8000"
   },
   "devDependencies": {
     "@nuxt/ui": "^2.12.3",
@@ -29,6 +30,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "axios": "^1.6.7"
+    "axios": "^1.6.7",
+    "json-server": "^1.0.0-alpha.23"
   }
 }
