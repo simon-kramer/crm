@@ -1,75 +1,32 @@
-# Nuxt 3 Minimal Starter
+# CRM Testaufgabe
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Infos vorab
+
+Das CRM kann alle Basis CRUD Operationen ausführen und hat ein paar kleine Extras. Wichtig ist jedoch, dass die type safety nicht überall gewährleistet ist und die jetzigen /pages sowie das default.vue layout in einer realen Umgebung refaktoriert werden müssten Header, Footer, Usermenü etc. sowie InfoBanner, DataTable, Pagination und EditModal. Bestimmte Funktionen sind - wie bspw. die Pagination - auch bedingt durch die Mock API, normalerweise würde sie per Store über die meta der /customer response umgesetzt werden und nicht "manuell" per method gebildet.
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
 # npm
-npm install
-
-# pnpm
-pnpm install
-
 # yarn
 yarn install
 
-# bun
-bun install
 ```
 
-## Development Server
+## DB Server (json-server)
 
-Start the development server on `http://localhost:3000`:
+Um die Mock API DB zu starten:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
 # yarn
-yarn dev
+yarn startdb
 
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+## Developmentserver
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
 # yarn
-yarn build
+yarn run dev -o
 
-# bun
-bun run build
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
