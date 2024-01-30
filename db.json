@@ -12,7 +12,7 @@
       "first_name": "Janette",
       "last_name": "Kereluk",
       "email": "boomhandmade@live.com",
-      "status": false
+      "status": true
     },
     {
       "id": "8d1c1c46-9b97-45e0-a8fb-68a0785ad05b",
@@ -152,6 +152,13 @@
       "first_name": "Werner",
       "last_name": "Heisenberg",
       "email": "werner@heisenberg.de",
+      "status": true
+    },
+    {
+      "id": "acafdb3c-699c-4f9a-a9e5-cefb739383c6",
+      "first_name": "Niels",
+      "last_name": "Bohr",
+      "email": "niels@bohr.com",
       "status": true
     }
   ]

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid' // needs to get typed
 import type { Customer } from '@/models/customers'
 const customerStore = useCustomerStore()
 

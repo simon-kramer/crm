@@ -1,9 +1,10 @@
 <script setup lang="ts">
 // Consts & imports
 const isOpen = ref(false)
+const route = useRoute()
+
 const colorMode = useColorMode()
 const colorModeButtonLabel = ref('Enable Light Mode')
-const route = useRoute()
 const capitalizeFirstLetter = (string: string) =>
   string.charAt(0).toUpperCase() + string.slice(1)
 
@@ -116,7 +117,11 @@ const navigation = [
         </template>
 
         <!-- Main Navigation Items -->
-        <UVerticalNavigation :links="navigation" :ui="{ base: 'gap-4' }" />
+        <UVerticalNavigation
+          :links="navigation"
+          :ui="{ base: 'gap-4' }"
+          @click="() => (isOpen = false)"
+        />
         <template #footer>
           <div class="flex items-center justify-between">
             <UButton variant="outline">Logout</UButton>
