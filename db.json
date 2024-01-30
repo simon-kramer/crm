@@ -152,7 +152,7 @@
       "first_name": "Werner",
       "last_name": "Heisenberg",
       "email": "werner@heisenberg.de",
-      "status": true
+      "status": false
     },
     {
       "id": "acafdb3c-699c-4f9a-a9e5-cefb739383c6",
@@ -160,6 +160,13 @@
       "last_name": "Bohr",
       "email": "niels@bohr.com",
       "status": true
+    },
+    {
+      "id": "a2481c71-4141-467d-a561-1136cfa77eb8",
+      "first_name": "Edwin",
+      "last_name": "Hubble",
+      "email": "edwin@hubble.com",
+      "status": false
     }
   ]
 }

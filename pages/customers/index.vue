@@ -102,7 +102,7 @@ onMounted(() => {
 
     <!-- Customer Datatable -->
     <div class="flex justify-between -mb-4 items-center">
-      <div class="text-sm">Customers Overall:</div>
+      <div class="text-sm">Customers Overall: {{ totalCustomers }}</div>
       <UButton variant="solid" color="primary" @click="() => openModal()"
         >Add New Customer</UButton
       >

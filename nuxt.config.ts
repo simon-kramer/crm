@@ -8,5 +8,5 @@ export default defineNuxtConfig({
       apiUrl: process.env.API_URL
     }
   },
-  modules: ['@pinia/nuxt', '@nuxt/ui', '@nuxt/image']
+  modules: ['@pinia/nuxt', '@nuxt/ui']
 })
