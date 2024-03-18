@@ -1,14 +1,14 @@
 # CRM
 
-## Infos vorab
+## Informations
 
-Das CRM kann alle Basis CRUD Operationen ausführen und hat ein paar kleine Extras. Wichtig ist jedoch, dass die type safety nicht überall gewährleistet ist und die jetzigen /pages sowie das default.vue layout in einer realen Umgebung **refaktoriert** werden müssten Header, Footer, Usermenü etc. sowie InfoBanner, DataTable, Pagination und EditModal. Bestimmte Funktionen sind - wie bspw. die Pagination - auch bedingt durch die Mock API, normalerweise würde sie per Store über die meta der /customer response umgesetzt werden und nicht "manuell" per method gebildet.
+The CRM can execute all basic CRUD operations and has a few small extras. However, it's important to note that type safety is not guaranteed everywhere, and the current /pages as well as the default.vue layout would need to be refactored in a real environment including the header, footer, user menu, etc., as well as the InfoBanner, DataTable, Pagination, and EditModal. Certain functions, such as pagination, are also dependent on the Mock API; normally, they would be implemented via the store over the meta of the /customer response and not "manually" formed via method.
 
-Zum schnellen Prototyping wurde Nuxt UI genutzt, weitere Technologien sind **Nuxt 3.10.0**, **Vue 3.3.9**, **Pinia 0.5.1 (2.x)** als zentralisierte Store Management. Implementiert als Module über Nuxt selbst und nicht als Standalone Dependencies um zentralisiertes Management über die **Nuxt DevTools** zu ermöglichen und bessere Übersicht zu gewährleisten.
+For rapid prototyping, Nuxt UI was used, with additional technologies including Nuxt 3.10.0, Vue 3.3.9, Pinia 0.5.1 (2.x) as centralized store management. Implemented as modules through Nuxt itself and not as standalone dependencies to enable centralized management via the Nuxt DevTools and ensure a better overview.
 
-Seit dem Update Nuxt 3.9.x wirft das NuxtUI hydration warnings, welche jedoch durch die neue **Vue Version 3.5**. behoben werden sollen, da ab dann auf ein Vue eigenes Composable zur Umsetzung zugegriffen werden kann, das Issue ist schon bei Github [Github Issue: NuxtUI Hydration](https://github.com/nuxt/ui/issues/1171).
+Since the Nuxt 3.9.x update, the NuxtUI has been throwing hydration warnings, which, however, are supposed to be resolved with the new Vue version 3.5, as it will then be possible to use a Vue-specific composable for implementation. The issue is already listed on GitHub as NuxtUI Hydration.[Github Issue: NuxtUI Hydration](https://github.com/nuxt/ui/issues/1171).
 
-## Setup
+## Setup/Install
 
 ```bash
 # yarn
@@ -18,7 +18,7 @@ yarn install
 
 ## DB Server (json-server)
 
-Um die Mock API DB zu starten:
+To start the Mock API DB Server:
 
 ```bash
 # yarn
@@ -26,7 +26,7 @@ yarn startdb
 
 ```
 
-## Developmentserver
+## Dev Server
 
 ```bash
 # yarn
